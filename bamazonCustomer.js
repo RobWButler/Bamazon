@@ -11,25 +11,55 @@ var connection = mysql.createConnection({
     user: "root",
   
     // Your password
-    password: "",
+    password: "root",
     database: "bamazon"
   });
 
   connection.connect(
 
-  )
+    inquirer.prompt([
+      {
+        type: "list",
+        name: "startChoice",
+        message: "Welcome to Bamazon! What would you like to do today?",
+        choices: ["Purchase", "Exit"]
+      }
+    ]).then(function(user) {
+      if (user.startChoice === "Purchase") {
+        showListing()
+        inquirer.prompt([
+          {
+            type: "input",
+            name: "id",
+            message: "Please input the id of the product you would like to purchase.",
+          },
+          {
+            type: "input",
+            name: "quantity",
+            message: "How many units would you like the purchase?"
+          }
+        ]).then(function(user) {
+            connection.query(
+              "UPDATE products SET stock_quantity = stock_quantity - ? WHERE item_id = ?",[user.quantity, user.id],
+              function(err, res){
+                console.log("Thank you for your purchase of " + user.quantity + " units.")
+              }
+            )
+        })
+      }
 
-  connection.connect(function(err) {
-    showListing();
-  });
+      if (user.startChoice === "Exit") {
+        console.log("Thank you for using Bamazon!")
+        connection.end()
+      }
+    }))
 
-  function showListing(){
-    connection.query(
-    "SELECT * FROM products",
-    function(err, res){
-        if (err) throw err;
-        console.table(res)
-    }
-    )
-    connection.end()
+function showListing(){
+  connection.query(
+  "SELECT * FROM products",
+  function(err, res){
+      if (err) throw err;
+      console.table(res)
   }
+  )
+}
