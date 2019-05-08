@@ -11,7 +11,7 @@ var connection = mysql.createConnection({
     user: "root",
   
     // Your password
-    password: "root",
+    password: "",
     database: "bamazon"
   });
 
@@ -39,12 +39,21 @@ var connection = mysql.createConnection({
             message: "How many units would you like the purchase?"
           }
         ]).then(function(user) {
-            connection.query(
-              "UPDATE products SET stock_quantity = stock_quantity - ? WHERE item_id = ?",[user.quantity, user.id],
-              function(err, res){
-                console.log("Thank you for your purchase of " + user.quantity + " units.")
-              }
-            )
+          connection.query(
+            "UPDATE products SET stock_quantity = stock_quantity - ? WHERE item_id = ?",[user.quantity, user.id],
+            function(err, res){
+              if (err) throw err;
+            }
+          )
+          connection.query(
+            "SELECT * FROM products WHERE item_id = ?",[user.id],
+            function(err, res){
+              if (err) throw err;
+              var total = parseFloat(res[0].price * user.quantity).toFixed(2)
+              console.log("Thank you for your purchase of " + user.quantity + " " + res[0].product_name + "(s)." +
+              "\nYour total purchase value was $" + total + ".");
+            }
+          )
         })
       }
 
@@ -59,7 +68,11 @@ function showListing(){
   "SELECT * FROM products",
   function(err, res){
       if (err) throw err;
-      console.table(res)
+      console.table(res);
   }
   )
+}
+
+function purchase(user){
+
 }
