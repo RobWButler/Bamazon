@@ -11,13 +11,13 @@ var connection = mysql.createConnection({
     user: "root",
   
     // Your password
-    password: "Ay02^R3bWGEeQwx5",
+    password: "",
     database: "bamazon"
   });
 
-connection.connect(
-    prompt()
-)
+
+prompt()
+
 
 function prompt(){
     
@@ -60,6 +60,7 @@ function showListing(){
             if (err) throw err;
             console.log("\n");
             console.table(res);
+            console.log("\n\n");
         }
     )
     prompt();
@@ -76,6 +77,7 @@ function lowInv(){
             } else {
                 console.log("\n");
                 console.table(res);
+                console.log("\n\n");
                 prompt();
             }
         }
@@ -89,6 +91,7 @@ function addInv(){
             if (err) {throw err}
             console.log("\n");
             console.table(res);
+            console.log("\n\n")
         }
     )
     inquirer.prompt([

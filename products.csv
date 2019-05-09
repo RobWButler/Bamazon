@@ -1,10 +1,10 @@
-1,Grapes,Food,3.29,500
-2,Dr. Pepper,Food,3.48,150
-3,Super Mario Maker 2,Video games,59.99,50
-4,Tire,Automotive,100,20
-5,Motor oil,Automotive,20,80
-6,Claritin,Pharmacy,8.5,100
-7,Winds of Winter,Books,10,0
-8,Dark Souls 4,Video games,59.99,30
-9,Ibuprofen,Pharmacy,5,150
-10,Guitar,Music,70,10
+1,Grape (bag),Food,3.29,500,0
+2,Dr. Pepper,Food,3.48,150,0
+3,Super Mario Maker 2,Video games,59.99,50,0
+4,Tire,Automotive,100,20,0
+5,Motor oil,Automotive,20,80,0
+6,Claritin,Pharmacy,8.5,100,0
+7,Winds of Winter,Books,10,0,0
+8,Dark Souls 4,Video games,59.99,30,0
+9,Ibuprofen,Pharmacy,5,150,0
+10,Guitar,Music,70,10,0

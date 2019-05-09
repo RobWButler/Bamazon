@@ -11,13 +11,13 @@ var connection = mysql.createConnection({
     user: "root",
   
     // Your password
-    password: "Ay02^R3bWGEeQwx5",
+    password: "",
     database: "bamazon"
   });
 
-  connection.connect(
-      prompt()
-    )
+
+prompt()
+
 
 function showListing(){
   connection.query(
@@ -40,6 +40,9 @@ function purchase(user){
       if (user.quantity > res[0].stock_quantity){
         console.log("Oops! We currently don't have that amount in stock.")
       } else {
+        connection.query(
+          "UPDATE products SET product_sales = product_sales + ? WHERE item_id = ?",[total, user.id],
+        )
         connection.query(
           "UPDATE products SET stock_quantity = stock_quantity - ? WHERE item_id = ?",[user.quantity, user.id],
           function(err, res){
