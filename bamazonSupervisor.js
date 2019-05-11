@@ -11,7 +11,7 @@ var connection = mysql.createConnection({
     user: "root",
   
     // Your password
-    password: "",
+    password: "Ay02^R3bWGEeQwx5",
     database: "bamazon"
   });
 
@@ -28,6 +28,11 @@ prompt()
     ]).then(function(user){
       if (user.startChoice === "View Product Sales By Department"){
         viewDep();
+        prompt();
+      }
+
+      if (user.startChoice === "Add New Department"){
+        addDept();
       }
 
       if (user.startChoice === "Exit"){
@@ -38,23 +43,11 @@ prompt()
   }
 
   function viewDep(){
-    var totalSales = [];
 
     connection.query(
-      "SELECT department_name, product_sales from products",
-      function(err, res){
-        if (err) {throw err}
-        for (i = 0; i < res.length; i++){
-          sales = res[i].product_sales
-          totalSales.push(sales)
-        }
-        
-        //console.table(totalSales)
-      }
-    )
-    connection.query(
       `SELECT 
-        department_id, departments.department_name, departments.over_head_costs, SUM(products.product_sales) 
+        department_id AS "ID", departments.department_name, departments.over_head_costs AS "Overhead Costs", 
+        SUM(products.product_sales) AS "Product Sales", (SUM(products.product_sales) - departments.over_head_costs) AS "Profit"
       FROM 
         departments 
       LEFT JOIN 
@@ -62,21 +55,55 @@ prompt()
       ON 
         (departments.department_name = products.department_name) 
       GROUP BY 
-        department_name`,
+        department_name
+      ORDER BY
+        department_id ASC`,
       function(err, res){
         if (err) {throw err}
 
-        var dbData = res
-        var profitCol = []
-        for (i = 0; i < res.length; i++){
-          var profit = totalSales[i] - res[i].over_head_costs
-          profitCol.push(profit)
-        }
         console.log("\n");
-        console.table(profitCol)
-        console.table(dbData);
+        console.table(res);
         console.log("\n\n");
       }
     )
-    prompt();
+    
   }
+
+function addDept(){
+
+  viewDep();
+
+  inquirer.prompt([
+    {
+      type: "input",
+      name: "dept",
+      message: "Department name:",
+    },
+    {
+      type: "input",
+      name: "costs",
+      message: "Overhead costs:"
+    }
+  ]).then(function(user) {
+      if (user.costs < 0){
+          console.log("Invalid (negative) value.")
+          prompt();
+      } else {
+
+        connection.query(
+          "INSERT INTO departments SET?",
+          {
+              department_name: user.dept,
+              over_head_costs: user.costs
+          },
+      function(err, res){
+          if (err) {throw err}
+          console.log("You have successfully created a " + user.dept + " department.")
+          prompt();
+      }
+      )
+     
+      }
+  })
+
+}

@@ -21,7 +21,14 @@ prompt()
 
 function showListing(){
   connection.query(
-  "SELECT * FROM products",
+  `SELECT 
+    item_id AS "ID",
+    product_name AS "Product",
+    department_name AS "Department",
+    price AS "Price",
+    stock_quantity AS "In Stock"
+  FROM 
+    products`,
   function(err, res){
       if (err) throw err;
       console.log("\n");
