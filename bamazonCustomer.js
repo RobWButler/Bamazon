@@ -11,7 +11,7 @@ var connection = mysql.createConnection({
     user: "root",
   
     // Your password
-    password: "",
+    password: "root",
     database: "bamazon"
   });
 
@@ -45,7 +45,8 @@ function purchase(user){
       var total = parseFloat(res[0].price * user.quantity).toFixed(2)
       var name = res[0].product_name
       if (user.quantity > res[0].stock_quantity){
-        console.log("Oops! We currently don't have that amount in stock.")
+        console.log("\nOops! We currently don't have that amount in stock.\n")
+        prompt();
       } else {
         connection.query(
           "UPDATE products SET product_sales = product_sales + ? WHERE item_id = ?",[total, user.id],
